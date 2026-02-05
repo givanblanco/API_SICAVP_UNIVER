@@ -1,10 +1,10 @@
 <?php
 class Database {
     // Config BD PwC
-    private $pwc_server = "tcp:10.0.1.34,1433";
-    private $db_pwc = "Campus";
-    private $username_pwc = "N30t3lR3f3r3nc1@";
-    private $pass_pwc = "password";
+    private $pwc_server = "tcp:192.168.1.12,1433";
+    private $db_pwc = "Campus_UNIVER_Reports";
+    private $username_pwc = "neotelref";
+    private $pass_pwc = "N30t3lR3f3r3nc1@";
     
     // Config BD NOM2001
     private $nom_server = "servidor2";
@@ -28,6 +28,8 @@ class Database {
         $conn = sqlsrv_connect($this->pwc_server, $connectionInfo);
         
         if (!$conn) {
+            //echo "Error: ";
+            //print_r(sqlsrv_errors());
             return null;
         }
         return $conn;
