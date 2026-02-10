@@ -32,7 +32,11 @@ class SchedulesAcaterm {
         $year = $academicYear;
         
 
-        $query = "SELECT DISTINCT ACADEMIC_TERM FROM SECTIONS WHERE ACADEMIC_YEAR = '$year' ORDER BY ACADEMIC_TERM";
+        $query = "SELECT DISTINCT ACADEMIC_TERM FROM SECTIONS SE WHERE SE.ACADEMIC_YEAR = '$year' 
+                    AND SE.EVENT_STATUS = 'A'
+                    AND SE.CONTACT_HR_SESSION > 0
+                    AND SE.ADDS <> 0    
+                    ORDER BY SE.ACADEMIC_TERM";
 
         $stmt = sqlsrv_query($conn, $query);
         
