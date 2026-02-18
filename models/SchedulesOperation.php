@@ -28,7 +28,24 @@ class SchedulesOperation {
                     ROW_NUMBER() OVER(ORDER BY LTRIM(RTRIM(ISNULL(PE.LAST_NAME,'')+' '+ISNULL(PE.Last_Name_Prefix,'')+' '+ISNULL(PE.FIRST_NAME,'')+' '+ISNULL(PE.MIDDLE_NAME,''))) ) NUM
                     , PE.PEOPLE_CODE_ID
                     , PE.PREV_GOV_ID
-                    , PE.GOVERNMENT_ID
+					, REPLACE(
+						REPLACE(
+						REPLACE(
+						REPLACE(
+						REPLACE(
+						REPLACE(
+						REPLACE(
+                        REPLACE(
+							LTRIM(RTRIM(PE.GOVERNMENT_ID))
+						, CHAR(13), '')  
+						, CHAR(10), '')  
+						, '-', '')       
+						, ',', '')       
+						, ' ', '')       
+						, '.', '')       
+						, '_', '')
+                        , '/', '')       
+						AS GOVERNMENT_ID
                     , UPPER(PE.LAST_NAME) LAST_NAME
                     , UPPER(PE.Last_Name_Prefix) Last_Name_Prefix
                     , UPPER(PE.FIRST_NAME) FIRST_NAME
@@ -84,9 +101,9 @@ class SchedulesOperation {
                     , SE.SCHEDULED_MEETINGS
                     , CASE WHEN ATS.AssignmentTemplateHeaderId <> 0 THEN 'SI' ELSE 'NO' END AS [PLANTILLA]
                     , SE.CONTACT_HR_SESSION
-                    , DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) MinutesClass
-                    , DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) / 60.0 HourClass
-                    , CEILING(DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) / 60.0 * 2) / 2.0 AS ROUND_HourClass
+                    , ISNULL(DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME),0) MinutesClass
+                    , ISNULL((DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) / 60.0), 0) HourClass
+                    , ISNULL((CEILING(DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) / 60.0 * 2) / 2.0),0) AS ROUND_HourClass
                     , IIF(DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) IS NULL, 'SH','HN') VAL_HORAS --(SH SIN HORARIO POSIBLE HIPERCOMPACTADA, HN HORARIO NORMAL)
                     , IIF (SE.EVENT_ID IN ('RLENFEENF1501','RLENFEENF1601','RLENFEENF1701','RLENFEENF1801','RLENFEENF1901','RLENFEENF1001','RLENFEENF1002','RLENFEENF1111','RLENFEENF1121','RLENFEENF1122','RLENFEENF1123'), 1, 0) AS [FLAG_CLINIC]
 
