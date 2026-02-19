@@ -1,8 +1,10 @@
 <?php
 class Database {
     // Config BD PwC
-    private $pwc_server = "tcp:192.168.1.12,1433";
-    private $db_pwc = "Campus_UNIVER_Reports";
+    private $pwc_server = "tcp:10.0.1.30,1433";
+    // private $pwc_server = "tcp:192.168.1.12,1433";
+    private $db_pwc = "Campus";
+    // private $db_pwc = "Campus_UNIVER_Reports";
     private $username_pwc = "neotelref";
     private $pass_pwc = "N30t3lR3f3r3nc1@";
     
