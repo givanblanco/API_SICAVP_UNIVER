@@ -11,7 +11,10 @@ CorsMiddleware::handle();
 // Obtener método y ruta
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = str_replace('/DevNG/SICAVP/API_SICAVP_UNIVER', '', $uri);
+
+// !importante cambiar remplazo de URL dependiendo dónde se están generando pruebas
+$uri = str_replace('/ProdNG/SICAVP/API-UNIVER', '', $uri); // Producción
+//$uri = str_replace('/DevNG/SICAVP/API_SICAVP_UNIVER', '', $uri); // Dev
 
 // Enrutamiento
 switch ($uri) {
