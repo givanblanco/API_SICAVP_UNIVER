@@ -57,7 +57,7 @@ class SchedulesOperation {
                     , FORMAT(SE.START_DATE, 'yyyy-MM-dd') START_DATE
                     , FORMAT(SE.END_DATE, 'yyyy-MM-dd') END_DATE
                     , SE.EVENT_ID
-                    , UPPER(SE.PUBLICATION_NAME_1) PUBLICATION_NAME_1
+                    , UPPER(EV.PUBLICATION_NAME_1) PUBLICATION_NAME_1
                     , SE.SECTION
                     , SE.SERIAL_ID
                     , SE.PROGRAM
@@ -105,7 +105,7 @@ class SchedulesOperation {
                     , ISNULL((DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) / 60.0), 0) HourClass
                     , ISNULL((CEILING(DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) / 60.0 * 2) / 2.0),0) AS ROUND_HourClass
                     , IIF(DATEDIFF(MINUTE, SSC.START_TIME, SSC.END_TIME) IS NULL, 'SH','HN') VAL_HORAS --(SH SIN HORARIO POSIBLE HIPERCOMPACTADA, HN HORARIO NORMAL)
-                    , IIF (SE.EVENT_ID IN ('RLENFEENF1501','RLENFEENF1601','RLENFEENF1701','RLENFEENF1801','RLENFEENF1901','RLENFEENF1001','RLENFEENF1002','RLENFEENF1111','RLENFEENF1121','RLENFEENF1122','RLENFEENF1123'), 1, 0) AS [FLAG_CLINIC]
+                    , IIF (EV.PUBLICATION_NAME_1 LIKE '%PR%CTICA%CL%N%', 1, 0) AS [FLAG_CLINIC]
 
                     FROM SECTIONS SE 
                         INNER JOIN SECTIONPER SEP
@@ -153,7 +153,7 @@ class SchedulesOperation {
                     , SE.START_DATE
                     , SE.END_DATE
                     , SE.EVENT_ID
-                    , SE.PUBLICATION_NAME_1
+                    , EV.PUBLICATION_NAME_1
                     , SE.SECTION
                     , SE.SERIAL_ID
                     , SE.PROGRAM
