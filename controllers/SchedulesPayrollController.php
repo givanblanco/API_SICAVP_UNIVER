@@ -12,6 +12,9 @@ class SchedulesPayrollController {
         
         $academicYear = $_GET['academic_year'];
         $academicTerm = $_GET['academic_term'];
+
+
+        
         
         // Validar que no estén vacíos
         if (empty($academicYear) || empty($academicTerm)) {

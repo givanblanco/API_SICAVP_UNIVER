@@ -12,7 +12,7 @@ class SchedulesOperationController {
         
         $academicYear = $_GET['academic_year'];
         $academicTerm = $_GET['academic_term'];
-        
+
         // Validar que no estén vacíos
         if (empty($academicYear) || empty($academicTerm)) {
             JsonResponse::error('Los parámetros academic_year y academic_term no pueden estar vacíos', 400);
@@ -29,15 +29,17 @@ class SchedulesOperationController {
         if ($terms === false) {
             JsonResponse::error('academic_term contiene valores inválidos. Ejemplo válido: 1C,1CMA,1CMB', 400);
         }
-        
+
         // Instanciar modelo y pasar los parámetros
         $model = new SchedulesOperation();
+
         $schedules_operation = $model->getSchedulesOperation($years, $terms);
-        
+
         if ($schedules_operation === null) {
             JsonResponse::error('Error al conectar con la base de datos', 500);
         }
         
+
         JsonResponse::success($schedules_operation, 'Horarios de operación SICAVP obtenidos correctamente');
     }
     

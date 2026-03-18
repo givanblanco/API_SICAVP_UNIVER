@@ -153,6 +153,7 @@ class SchedulesOperation {
                     , SE.START_DATE
                     , SE.END_DATE
                     , SE.EVENT_ID
+                    , EV.EVENT_ID
                     , EV.PUBLICATION_NAME_1
                     , SE.SECTION
                     , SE.SERIAL_ID
