@@ -32,11 +32,29 @@ class SchedulesAcaterm {
         $year = $academicYear;
         
 
-        $query = "SELECT DISTINCT ACADEMIC_TERM FROM SECTIONS SE WHERE SE.ACADEMIC_YEAR = '$year' 
-                    AND SE.EVENT_STATUS = 'A'
-                    AND SE.CONTACT_HR_SESSION > 0
-                    AND SE.ADDS <> 0    
-                    ORDER BY SE.ACADEMIC_TERM";
+        $query = "SELECT
+                    SE.ACADEMIC_TERM,
+                    CASE WHEN CAST(GETDATE() AS date) BETWEEN CAL.START_DATE AND CAL.END_DATE   -- vigente
+                        OR CAL.START_DATE > CAST(GETDATE() AS date)                        -- por iniciar
+                    THEN 1 ELSE 0
+                END AS ESTATUS
+                FROM SECTIONS SE
+                LEFT JOIN (
+                    SELECT ACADEMIC_YEAR, ACADEMIC_TERM,
+                        MIN(START_DATE) AS START_DATE,
+                        MAX(END_DATE)   AS END_DATE
+                    FROM ACADEMICCALENDAR
+                    WHERE ACADEMIC_YEAR = '$year'
+                    GROUP BY ACADEMIC_YEAR, ACADEMIC_TERM
+                ) CAL
+                ON CAL.ACADEMIC_YEAR = SE.ACADEMIC_YEAR
+                AND CAL.ACADEMIC_TERM = SE.ACADEMIC_TERM
+                WHERE SE.ACADEMIC_YEAR = '$year'
+                AND SE.EVENT_STATUS = 'A'
+                AND SE.CONTACT_HR_SESSION > 0
+                AND SE.ADDS <> 0
+                GROUP BY SE.ACADEMIC_TERM, CAL.START_DATE, CAL.END_DATE
+                ORDER BY CAL.START_DATE;";
 
         $stmt = sqlsrv_query($conn, $query);
         
@@ -48,13 +66,13 @@ class SchedulesAcaterm {
         $schedules_acaterm = array();
 
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-            $schedules_acaterm[] = $row['ACADEMIC_TERM'];
+            $schedules_acaterm[] = $row;
         }
         
         sqlsrv_free_stmt($stmt);
         sqlsrv_close($conn);
         
-        return implode(', ', $schedules_acaterm);
+        return $schedules_acaterm;
     }
     
     
